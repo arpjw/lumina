@@ -1,6 +1,6 @@
 # Lumina: Cross-Source Alternative Data Fusion for Systematic Macro Regime Detection
 
-**Arya Somu**, Monolith Systematic LLC | De Anza College
+**Arya Somu**, Monolith Systematic LLC | 
 [arya@monolithsystematic.com](mailto:arya@monolithsystematic.com)
 
 ---
