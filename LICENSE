@@ -1,0 +1,111 @@
+<title>MIT License | Choose a License</title>
+<meta name="generator" content="Jekyll v3.10.0" />
+<meta property="og:title" content="MIT License" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="A short and simple permissive license with conditions only requiring preservation of copyright and license notices. Licensed works, modifications, and larger works may be distributed under different terms and without source code." />
+<meta property="og:description" content="A short and simple permissive license with conditions only requiring preservation of copyright and license notices. Licensed works, modifications, and larger works may be distributed under different terms and without source code." />
+<link rel="canonical" href="https://choosealicense.com/licenses/mit/" />
+<meta property="og:url" content="https://choosealicense.com/licenses/mit/" />
+<meta property="og:site_name" content="Choose a License" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2026-02-21T02:06:03+00:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="MIT License" />
+<meta name="twitter:site" content="@github" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2026-02-21T02:06:03+00:00","datePublished":"2026-02-21T02:06:03+00:00","description":"A short and simple permissive license with conditions only requiring preservation of copyright and license notices. Licensed works, modifications, and larger works may be distributed under different terms and without source code.","headline":"MIT License","mainEntityOfPage":{"@type":"WebPage","@id":"https://choosealicense.com/licenses/mit/"},"url":"https://choosealicense.com/licenses/mit/"}</script>
+<!-- End Jekyll SEO tag -->
+
+  </head>
+  <body class="license">
+    <div class="container">
+
+      
+  <ol>
+    <li>
+      
+        <a href="/">Home</a> / <a href="/licenses/">Licenses</a>
+      
+    </li>
+  </ol>
+  <script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [{
+      "@type": "ListItem",
+--
+        "name": "MIT License"
+      }
+    }]
+  }
+  </script>
+
+
+
+      
+        <h1>MIT License</h1>
+      
+
+
+      <div class="clearfix">
+
+        <div class="license-body">
+
+            
+
+            <p>
+                A short and simple permissive license with conditions only requiring preservation of copyright and license notices. Licensed works, modifications, and larger works may be distributed under different terms and without source code.
+            </p>
+
+            <div class="license-page-details">
+
+              <table class="license-rules">
+                <tr>
+                
+                
+                  <th class="label">Permissions</th>
+--
+            <pre id="license-text">MIT License
+
+Copyright (c) [year] [fullname]
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+--
+            "title": "MIT License",
+            "spdx_id": "MIT"
+          },
+        
+          {
+            "title": "Mozilla Public License 2.0",
+            "spdx_id": "MPL-2.0"
+          },
+        
+          {
+            "title": "Microsoft Public License",
+            "spdx_id": "MS-PL"
+          },
+        
+          {
+            "title": "Microsoft Reciprocal License",
+            "spdx_id": "MS-RL"
+          },
+        
+          {
+            "title": "Mulan Permissive Software License, Version 2",
