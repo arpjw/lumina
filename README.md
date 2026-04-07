@@ -248,7 +248,7 @@ If you reference this work, please cite as:
 
 ```
 Somu, Arya. "Lumina: Cross-Source Alternative Data Fusion for Systematic
-Macro Regime Detection." Polaris Research Group, De Anza College, 2026.
+Macro Regime Detection." Monolith Systematic LLC, 2026.
 https://github.com/arpjw/lumina
 ```
 
