@@ -243,6 +243,7 @@ lumina/
 
 ---
 
+<<<<<<< HEAD
 ## Citation
 
 If you reference this work, please cite as:
@@ -256,3 +257,6 @@ https://github.com/arpjw/lumina
 ---
 
 *Affiliated: Monolith Systematic LLC*
+=======
+*Monolith Systematic LLC — Arya Somu*
+>>>>>>> 3acb3efb2dcb33572f1367ffcdfbe636331322a6
