@@ -89,4 +89,4 @@ Signal fusion architecture follows a scalar-modulation design: geopolitical and 
 
 ---
 
-*Polaris Research Group / Monolith Systematic LLC — Arya Somu*
+*Monolith Systematic LLC — Arya Somu*
