@@ -1,0 +1,45 @@
+# env
+.env
+*.env.local
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+*.egg-info/
+dist/
+.venv/
+venv/
+
+# Rust
+ingestion/target/
+
+# Node
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+
+# Data (keep structure, not content)
+data/raw/
+data/features/
+data/signals/*.db
+!data/raw/.gitkeep
+!data/features/.gitkeep
+!data/signals/.gitkeep
+
+# Models
+models/registry/mlflow.db
+models/registry/artifacts/
+models/regime_classifier/
+
+# MLflow
+mlruns/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/settings.json
+.idea/
+*.swp

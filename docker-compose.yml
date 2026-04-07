@@ -1,0 +1,79 @@
+version: "3.9"
+
+services:
+  ingestion:
+    build:
+      context: ./ingestion
+      dockerfile: ../docker/Dockerfile.ingestion
+    volumes:
+      - ./data:/app/data
+      - ./.env:/app/.env
+    environment:
+      - RUST_LOG=info
+    restart: "no"
+    profiles: ["ingest"]
+
+  pipeline:
+    build:
+      context: ./pipeline
+      dockerfile: ../docker/Dockerfile.pipeline
+    volumes:
+      - ./data:/app/data
+      - ./models:/app/models
+      - ./.env:/app/.env
+    environment:
+      - MLFLOW_TRACKING_URI=http://mlflow:5001
+      - PYTHONUNBUFFERED=1
+    depends_on:
+      - mlflow
+    restart: "no"
+    profiles: ["pipeline"]
+
+  api:
+    build:
+      context: ./api
+      dockerfile: ../docker/Dockerfile.api
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./data:/app/data
+      - ./models:/app/models
+      - ./.env:/app/.env
+    environment:
+      - MLFLOW_TRACKING_URI=http://mlflow:5001
+      - DATABASE_URL=sqlite:////app/data/signals/signals.db
+      - PYTHONUNBUFFERED=1
+    depends_on:
+      - mlflow
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: ../docker/Dockerfile.frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:8000
+      - NEXT_PUBLIC_WS_URL=ws://localhost:8000
+    depends_on:
+      - api
+    restart: unless-stopped
+
+  mlflow:
+    image: ghcr.io/mlflow/mlflow:v2.11.1
+    ports:
+      - "5001:5001"
+    volumes:
+      - ./models/registry:/mlflow
+    command: >
+      mlflow server
+      --host 0.0.0.0
+      --port 5001
+      --backend-store-uri sqlite:////mlflow/mlflow.db
+      --default-artifact-root /mlflow/artifacts
+    restart: unless-stopped
+
+volumes:
+  data:
+  models:

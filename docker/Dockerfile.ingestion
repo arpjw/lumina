@@ -1,0 +1,18 @@
+FROM rust:1.77-slim AS builder
+
+WORKDIR /app
+COPY ingestion/ .
+
+RUN apt-get update && apt-get install -y pkg-config libssl-dev && rm -rf /var/lib/apt/lists/*
+RUN cargo build --release --bin ingest
+
+FROM debian:bookworm-slim
+WORKDIR /app
+
+RUN apt-get update && apt-get install -y ca-certificates libssl3 && rm -rf /var/lib/apt/lists/*
+
+COPY --from=builder /app/target/release/ingest /usr/local/bin/ingest
+
+VOLUME ["/app/data"]
+ENTRYPOINT ["ingest"]
+CMD ["all"]
