@@ -19,6 +19,7 @@ usage() {
   echo "  Stages:"
   echo "    all        Run full pipeline (default)"
   echo "    ingest     Rust ingestion only"
+  echo "    backfill   Reddit historical backfill via Arctic Shift"
   echo "    nlp        Python NLP (sentiment + topics + geopolitical)"
   echo "    train      Train regime classifier"
   echo "    predict    Run prediction on latest data"
@@ -98,6 +99,13 @@ run_predict() {
   log_ok "Prediction complete ($(( SECONDS - t0 ))s)"
 }
 
+run_backfill() {
+  log_start "Reddit historical backfill (Arctic Shift)"
+  local t0=$SECONDS
+  docker compose run --rm pipeline backfill
+  log_ok "Backfill complete ($(( SECONDS - t0 ))s)"
+}
+
 run_nlp() {
   run_sentiment
   run_topics
@@ -119,6 +127,7 @@ case $STAGE in
     run_predict
     ;;
   ingest)   run_ingest ;;
+  backfill) run_backfill ;;
   nlp)      run_nlp ;;
   train)    run_train ;;
   predict)  run_predict ;;

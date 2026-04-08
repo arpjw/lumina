@@ -70,6 +70,14 @@ def shap():
 
 
 @cli.command()
+def backfill():
+    from backfill.run_backfill import run_backfill
+    logger.info("Running Reddit historical backfill via Arctic Shift")
+    summary = run_backfill()
+    logger.info(f"Backfill complete: {summary}")
+
+
+@cli.command()
 @click.pass_context
 def all(ctx):
     logger.info("Running full pipeline: sentiment → topics → geopolitical → train → predict")
