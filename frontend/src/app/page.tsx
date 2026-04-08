@@ -6,15 +6,19 @@ import { SentimentChart } from "@/components/dashboard/SentimentChart";
 import { GeopoliticalChart, TopicBars } from "@/components/dashboard/Charts";
 import { BacktestPanel } from "@/components/notebook/BacktestPanel";
 import { ShapChart, ConfusionMatrix } from "@/components/inspector";
+import { TearsheetTable } from "@/components/validation/TearsheetTable";
+import { ICChart } from "@/components/validation/ICChart";
 import { Card } from "@/components/ui";
 import { useLiveSignal } from "@/hooks/useLiveSignal";
+import { useFetch } from "@/hooks/useFetch";
 
-type View = "dashboard" | "notebook" | "inspector";
+type View = "dashboard" | "notebook" | "inspector" | "validation";
 
 const NAV_ITEMS: { id: View; label: string; icon: string }[] = [
   { id: "dashboard", label: "Signal Dashboard", icon: "◈" },
   { id: "notebook", label: "Research Notebook", icon: "⌘" },
   { id: "inspector", label: "Model Inspector", icon: "◉" },
+  { id: "validation", label: "Validation", icon: "◇" },
 ];
 
 function Sidebar({
@@ -230,6 +234,59 @@ function InspectorView() {
   );
 }
 
+interface TearsheetResponse {
+  summary: Array<{
+    ticker: string;
+    horizon: number;
+    ic: number;
+    ic_pvalue: number;
+    ir: number | null;
+    hit_rate: number;
+    n_obs: number;
+  }>;
+  rolling_ic: Array<{
+    date: string;
+    ticker: string;
+    rolling_ic: number;
+  }>;
+}
+
+function ValidationView() {
+  const { data, isLoading } = useFetch<TearsheetResponse>(
+    "http://localhost:8000/validation/tearsheet"
+  );
+
+  return (
+    <div className="max-w-5xl space-y-6">
+      <div>
+        <h2 className="text-sm font-mono font-semibold text-zinc-200 mb-1">
+          Cross-asset signal validation
+        </h2>
+        <p className="text-xs text-zinc-500 font-mono">
+          Spearman IC, information ratio, and hit rate of regime signals against SPY, TLT, GLD, DXY
+          forward returns.
+        </p>
+      </div>
+
+      <Card title="IC tearsheet" subtitle="Signal predictiveness by ticker and horizon">
+        {isLoading ? (
+          <p className="text-xs text-zinc-600 font-mono animate-pulse">Loading tearsheet...</p>
+        ) : (
+          <TearsheetTable data={data?.summary ?? []} />
+        )}
+      </Card>
+
+      <Card title="Rolling IC" subtitle="63-day rolling Spearman IC · 1-day horizon">
+        {isLoading ? (
+          <p className="text-xs text-zinc-600 font-mono animate-pulse">Loading chart...</p>
+        ) : (
+          <ICChart data={data?.rolling_ic ?? []} />
+        )}
+      </Card>
+    </div>
+  );
+}
+
 export default function Page() {
   const [view, setView] = useState<View>("dashboard");
   const { connected } = useLiveSignal();
@@ -261,6 +318,7 @@ export default function Page() {
           {view === "dashboard" && <DashboardView />}
           {view === "notebook" && <NotebookView />}
           {view === "inspector" && <InspectorView />}
+          {view === "validation" && <ValidationView />}
         </div>
       </main>
     </div>
