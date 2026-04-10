@@ -40,7 +40,7 @@ export function ICChart({ data }: { data: RollingICRow[] }) {
     (a, b) => String(a.date).localeCompare(String(b.date))
   );
 
-  const tickers = [...new Set(data.map((d) => d.ticker))];
+  const tickers = Array.from(new Set(data.map((d) => d.ticker)));
 
   return (
     <ResponsiveContainer width="100%" height={300}>
