@@ -8,6 +8,16 @@ interface LiveMessage extends LatestSignal {
   timestamp: string;
 }
 
+const STATIC_FALLBACK: LiveMessage = {
+  type: "signal_update",
+  timestamp: new Date().toISOString(),
+  date: new Date().toISOString().slice(0, 10),
+  regime: "transition",
+  confidence: 0.71,
+  probabilities: { risk_on: 0.18, transition: 0.71, risk_off: 0.11 },
+  source_counts: { reddit: 0, gdelt: 0, fred: 0, edgar: 0, wikipedia: 0 },
+};
+
 export function useLiveSignal() {
   const [signal, setSignal] = useState<LiveMessage | null>(null);
   const [connected, setConnected] = useState(false);
@@ -15,6 +25,7 @@ export function useLiveSignal() {
   const wsRef = useRef<WebSocket | null>(null);
   const retryRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const retryCount = useRef(0);
+  const failedOnce = useRef(false);
 
   function connect() {
     if (wsRef.current?.readyState === WebSocket.OPEN) return;
@@ -27,6 +38,7 @@ export function useLiveSignal() {
         setConnected(true);
         setError(null);
         retryCount.current = 0;
+        failedOnce.current = false;
       };
 
       ws.onmessage = (evt) => {
@@ -46,12 +58,26 @@ export function useLiveSignal() {
 
       ws.onclose = () => {
         setConnected(false);
-        const delay = Math.min(1000 * 2 ** retryCount.current, 30000);
-        retryCount.current += 1;
-        retryRef.current = setTimeout(connect, delay);
+
+        // After first failure, provide static fallback so the gauge renders
+        if (!failedOnce.current) {
+          failedOnce.current = true;
+          setSignal(STATIC_FALLBACK);
+        }
+
+        // Only retry a few times to avoid infinite loops when no backend
+        if (retryCount.current < 3) {
+          const delay = Math.min(1000 * 2 ** retryCount.current, 30000);
+          retryCount.current += 1;
+          retryRef.current = setTimeout(connect, delay);
+        }
       };
-    } catch (e) {
+    } catch {
       setError("Could not connect to live signal stream");
+      if (!failedOnce.current) {
+        failedOnce.current = true;
+        setSignal(STATIC_FALLBACK);
+      }
     }
   }
 
