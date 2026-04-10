@@ -43,3 +43,4 @@ Thumbs.db
 .vscode/settings.json
 .idea/
 *.swp
+kalshi_private_key.pem
