@@ -86,8 +86,7 @@ def fetch_period(
             "after": after,
             "before": before,
             "limit": PAGE_SIZE,
-            "sort": "created_utc",
-            "order": "asc",
+            
         }
         if page_after is not None:
             params["after"] = page_after
@@ -130,6 +129,9 @@ def fetch_all(
     all_records: list[dict] = []
 
     for period_name, (after, before) in periods.items():
+        from datetime import datetime
+        after = int(datetime.strptime(after, "%Y-%m-%d").timestamp())
+        before = int(datetime.strptime(before, "%Y-%m-%d").timestamp())
         logger.info(f"Period: {period_name} ({after} → {before})")
         for sub in subreddits:
             logger.info(f"  Fetching r/{sub}")

@@ -122,7 +122,7 @@ class RegimeClassifier:
             "random_state": 42,
         }
 
-        tscv = TimeSeriesSplit(n_splits=3)
+        tscv = TimeSeriesSplit(n_splits=2)
         fold_reports = []
 
         with mlflow.start_run(run_name="regime-classifier"):
@@ -136,7 +136,7 @@ class RegimeClassifier:
                 y_train, y_val = y_enc[train_idx], y_enc[val_idx]
 
                 model = xgb.XGBClassifier(**params)
-                model.fit(X_train, y_train, eval_set=[(X_val, y_val)], verbose=False)
+                model.fit(X_train, y_train, verbose=False)
 
                 preds = model.predict(X_val)
                 report = classification_report(y_val, preds, output_dict=True, zero_division=0)

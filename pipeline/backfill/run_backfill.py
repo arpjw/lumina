@@ -6,8 +6,8 @@ from pathlib import Path
 
 from loguru import logger
 
-from pipeline.backfill.arctic_shift import fetch_all, PERIODS, SUBREDDITS
-from pipeline.backfill.dedup import dedup
+from backfill.arctic_shift import fetch_all, PERIODS, SUBREDDITS
+from backfill.dedup import dedup
 
 DATA_DIR = Path(__file__).resolve().parents[2] / "data"
 
