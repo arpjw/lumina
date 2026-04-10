@@ -70,6 +70,14 @@ def shap():
 
 
 @cli.command()
+def kalshi():
+    from signals import kalshi_features
+    logger.info("Fetching Kalshi prediction market signals")
+    result = kalshi_features.run(DATA_DIR)
+    logger.info(f"Kalshi signal ingest complete: {result}")
+
+
+@cli.command()
 def backfill():
     from backfill.run_backfill import run_backfill
     logger.info("Running Reddit historical backfill via Arctic Shift")

@@ -7,7 +7,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from loguru import logger
 
 from core.database import init_db
-from routers import signals, sentiment, topics, geopolitical, backtest, live, validation
+from routers import signals, sentiment, topics, geopolitical, backtest, live, validation, kalshi
 
 load_dotenv()
 
@@ -43,6 +43,7 @@ app.include_router(geopolitical.router, prefix="/geopolitical", tags=["geopoliti
 app.include_router(backtest.router, prefix="/backtest", tags=["backtest"])
 app.include_router(live.router, tags=["websocket"])
 app.include_router(validation.router, prefix="/validation", tags=["validation"])
+app.include_router(kalshi.router, prefix="/kalshi", tags=["kalshi"])
 
 
 @app.get("/health")

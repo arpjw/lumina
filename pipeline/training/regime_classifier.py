@@ -24,22 +24,26 @@ def load_feature_matrix(data_dir: str) -> pd.DataFrame:
 
     parts = []
 
-    sentiment_path = features_dir / "sentiment" / "daily_aggregated.parquet"
-    if sentiment_path.exists():
-        sent = pd.read_parquet(sentiment_path)
-        parts.append(sent.set_index("date"))
+    def _load(path: Path) -> Optional[pd.DataFrame]:
+        if not path.exists():
+            return None
+        df = pd.read_parquet(path)
+        if "date" in df.columns:
+            df["date"] = pd.to_datetime(df["date"])
+            df = df.set_index("date")
+        elif not isinstance(df.index, pd.DatetimeIndex):
+            df.index = pd.to_datetime(df.index)
+        return df
 
-    geo_path = features_dir / "geopolitical" / "daily_geopolitical.parquet"
-    if geo_path.exists():
-        geo = pd.read_parquet(geo_path)
-        parts.append(geo.set_index("date"))
-
-    topic_path = features_dir / "topics" / "daily_topic_counts.parquet"
-    if topic_path.exists():
-        topics = pd.read_parquet(topic_path)
-        if "date" in topics.columns:
-            topics = topics.set_index("date")
-        parts.append(topics)
+    for path in (
+        features_dir / "sentiment" / "daily_aggregated.parquet",
+        features_dir / "geopolitical" / "daily_geopolitical.parquet",
+        features_dir / "kalshi" / "daily_kalshi.parquet",
+        features_dir / "topics" / "daily_topic_counts.parquet",
+    ):
+        df = _load(path)
+        if df is not None:
+            parts.append(df)
 
     if not parts:
         raise FileNotFoundError("No feature files found. Run the NLP pipeline first.")
