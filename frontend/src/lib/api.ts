@@ -50,6 +50,14 @@ export interface GeopoliticalDay {
   total_events: number;
 }
 
+export interface KalshiSignal {
+  date: string;
+  kalshi_regime_scalar: number;
+  kalshi_n_markets: number;
+  kalshi_n_weighted_markets: number;
+  kalshi_total_open_interest: number;
+}
+
 export interface TopicDay {
   date: string;
   [topic: string]: string | number;
@@ -173,6 +181,23 @@ function syntheticGeo(days: number): GeopoliticalDay[] {
   return out;
 }
 
+function syntheticKalshi(days: number): KalshiSignal[] {
+  const rand = seededRandom(131);
+  let scalar = -0.1;
+  const out: KalshiSignal[] = [];
+  for (let i = days - 1; i >= 0; i--) {
+    scalar = Math.max(-1, Math.min(1, scalar + (rand() - 0.5) * 0.07));
+    out.push({
+      date: isoDate(i),
+      kalshi_regime_scalar: +scalar.toFixed(4),
+      kalshi_n_markets: Math.floor(60 + rand() * 30),
+      kalshi_n_weighted_markets: Math.floor(20 + rand() * 10),
+      kalshi_total_open_interest: +(rand() * 12000).toFixed(2),
+    });
+  }
+  return out;
+}
+
 function syntheticTopics(days: number): TopicDay[] {
   const topics = [
     "inflation",
@@ -288,6 +313,15 @@ export const api = {
         return await get<TopicSummary>("/topics/summary");
       } catch {
         return syntheticTopicSummary();
+      }
+    },
+  },
+  kalshi: {
+    signal: async (days = 60) => {
+      try {
+        return await get<KalshiSignal[]>(`/kalshi/signal?days=${days}`);
+      } catch {
+        return syntheticKalshi(days);
       }
     },
   },

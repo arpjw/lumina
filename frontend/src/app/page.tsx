@@ -110,17 +110,47 @@ function DashboardView() {
   );
 }
 
+interface KalshiSignalPoint {
+  date: string;
+  kalshi_regime_scalar: number;
+  kalshi_n_markets: number;
+  kalshi_n_weighted_markets: number;
+  kalshi_total_open_interest: number;
+}
+
+const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
+
 function SourceGrid() {
-  const sources = [
+  const { data: kalshiData } = useFetch<KalshiSignalPoint[]>(`${API_BASE}/kalshi/signal?days=1`);
+  const kalshiScalar = kalshiData?.[0]?.kalshi_regime_scalar;
+  const kalshiNMarkets = kalshiData?.[0]?.kalshi_n_weighted_markets;
+
+  const sources: {
+    name: string;
+    color: string;
+    desc: string;
+    extra?: string;
+  }[] = [
     { name: "reddit", color: "#f97316", desc: "r/investing · r/MacroEconomics · r/wallstreetbets" },
     { name: "gdelt", color: "#38bdf8", desc: "Global news event stream · CAMEO codes" },
     { name: "edgar", color: "#a78bfa", desc: "SEC 8-K · 10-K filings" },
     { name: "fred", color: "#34d399", desc: "40+ macro indicator series" },
     { name: "wikipedia", color: "#fbbf24", desc: "Breaking event stream · edit delta" },
+    {
+      name: "kalshi",
+      color: "#ec4899",
+      desc: "Prediction market probabilities · Fed, CPI, GDP",
+      extra:
+        kalshiScalar !== undefined
+          ? `scalar: ${kalshiScalar >= 0 ? "+" : ""}${kalshiScalar.toFixed(2)}${
+              kalshiNMarkets ? ` · n=${kalshiNMarkets}` : ""
+            }`
+          : undefined,
+    },
   ];
 
   return (
-    <div className="grid grid-cols-5 gap-3">
+    <div className="grid grid-cols-3 gap-3">
       {sources.map((s) => (
         <div key={s.name} className="bg-zinc-900 rounded p-3 border border-zinc-800">
           <div className="flex items-center gap-2 mb-1.5">
@@ -128,6 +158,9 @@ function SourceGrid() {
             <span className="text-xs font-mono font-semibold text-zinc-200">{s.name}</span>
           </div>
           <p className="text-xs text-zinc-600 font-mono leading-relaxed">{s.desc}</p>
+          {s.extra && (
+            <p className="text-[11px] text-zinc-400 font-mono mt-1.5">{s.extra}</p>
+          )}
         </div>
       ))}
     </div>
